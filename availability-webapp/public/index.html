@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Availability Web App</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    #statusButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+    .available {
+      background-color: green;
+      color: white;
+    }
+    .unavailable {
+      background-color: red;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <button id="statusButton" class="unavailable">Unavailable</button>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const button = document.getElementById('statusButton');
+
+    socket.on('status', (status) => {
+      button.className = status;
+      button.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+    });
+
+    button.addEventListener('click', () => {
+      socket.emit('toggleStatus');
+    });
+  </script>
+</body>
+</html>
+
